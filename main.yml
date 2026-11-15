@@ -1,13 +1,6 @@
-name: Build NuvioScan APK
+name: Build Shunno Scan APK
 
-on:
-  push:
-    branches: [ "main", "master" ]
-    tags:
-      - 'v*'
-  pull_request:
-    branches: [ "main", "master" ]
-  workflow_dispatch:
+on: [push, workflow_dispatch]
 
 permissions:
   contents: write
@@ -43,27 +36,29 @@ jobs:
       - name: Prepare Release APKs
         run: |
           mkdir -p release-apk
+          cp app/build/outputs/apk/debug/app-debug.apk release-apk/ShunnoScan.apk
           cp app/build/outputs/apk/debug/app-debug.apk release-apk/NuvioScan.apk
           cp app/build/outputs/apk/debug/app-debug.apk release-apk/LumaScan.apk
 
-      - name: Upload APK Artifact
+      - name: Upload ShunnoScan APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: NuvioScan-Release-APK
-          path: release-apk/NuvioScan.apk
+          name: ShunnoScan-Release-APK
+          path: release-apk/ShunnoScan.apk
 
       - name: Publish 1-Click Direct Download Release
         if: github.event_name != 'pull_request'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: latest
-          name: "NuvioScan v2.0 (Direct 1-Click APK Download)"
+          name: "Shunno Scan v2.1 (Direct 1-Click APK Download)"
           make_latest: true
           body: |
             ### 📲 Direct 1-Click Download for Android (Non-IT Friendly)
-            Tap the link below on any Android phone to download and install **NuvioScan** immediately (no GitHub account required):
-            - **[Download NuvioScan.apk](https://github.com/${{ github.repository }}/releases/latest/download/NuvioScan.apk)**
+            Tap the link below on any Android phone to download and install **Shunno Scan** immediately (no GitHub account required):
+            - **[Download ShunnoScan.apk](https://github.com/${{ github.repository }}/releases/latest/download/ShunnoScan.apk)**
           files: |
+            release-apk/ShunnoScan.apk
             release-apk/NuvioScan.apk
             release-apk/LumaScan.apk
         env:

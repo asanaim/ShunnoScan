@@ -9,7 +9,7 @@ import android.net.Uri
 class LumaScanDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     companion object {
-        const val DATABASE_NAME = "nuvioscan.db"
+        const val DATABASE_NAME = "shunnoscan.db"
         const val DATABASE_VERSION = 1
 
         const val TABLE_DOCS = "scanned_docs"
@@ -93,7 +93,7 @@ class LumaScanDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NA
                         pdfUri = if (!uriStr.isNullOrEmpty()) Uri.parse(uriStr) else null,
                         pageCount = c.getInt(c.getColumnIndexOrThrow(COL_PAGE_COUNT)),
                         date = c.getString(c.getColumnIndexOrThrow(COL_DATE)) ?: "",
-                        scriptLabel = c.getString(c.getColumnIndexOrThrow(COL_SCRIPT)) ?: "English / Latin",
+                        scriptLabel = c.getString(c.getColumnIndexOrThrow(COL_SCRIPT)) ?: "English",
                         ocrText = c.getString(c.getColumnIndexOrThrow(COL_OCR_TEXT)) ?: "",
                         csvTable = c.getString(c.getColumnIndexOrThrow(COL_CSV_TABLE)) ?: "",
                         detectedPhone = c.getString(c.getColumnIndexOrThrow(COL_PHONE)),

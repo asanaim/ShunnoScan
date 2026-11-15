@@ -30,7 +30,7 @@ data class PageOcrData(
 object SearchablePdfGenerator {
 
     const val DOWNLOAD_PAGE_URL = "https://asanaim.github.io/LumaScan/"
-    const val DIRECT_APK_DOWNLOAD_URL = "https://github.com/asanaim/LumaScan/releases/latest/download/NuvioScan.apk"
+    const val DIRECT_APK_DOWNLOAD_URL = "https://github.com/asanaim/LumaScan/releases/latest/download/ShunnoScan.apk"
 
     private val sensitivePattern = Regex(
         "(\\b\\d{4}[ -]?\\d{4}[ -]?\\d{4,7}\\b)|(\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}\\b)|(\\+?\\d[\\d -]{7,14}\\d)"
@@ -139,10 +139,6 @@ object SearchablePdfGenerator {
         }
     }
 
-    /**
-     * Generates a searchable PDF where both the OCR text layer and the embedded download URL
-     * are written strictly in the invisible PDF text stream (nothing is visibly printed over the scan).
-     */
     fun generateSearchablePdf(
         context: Context,
         pages: List<PageOcrData>,

@@ -21,6 +21,8 @@ import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
@@ -35,6 +37,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -149,6 +152,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val appleBlue = Color(0xFF0A84FF)
+            val appleDeepBlue = Color(0xFF0040DD)
             val appleGreen = Color(0xFF30D158)
             val appleOrange = Color(0xFFFF9F0A)
             val appleRed = Color(0xFFFF3B30)
@@ -245,24 +249,56 @@ class MainActivity : ComponentActivity() {
             Surface(modifier = Modifier.fillMaxSize(), color = appleBg) {
                 Column(modifier = Modifier.fillMaxSize().padding(horizontal = 20.dp, vertical = 14.dp)) {
                     Spacer(modifier = Modifier.height(10.dp))
-                    Text(
-                        text = "NuvioScan",
-                        fontSize = 32.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black
-                    )
-                    Text(
-                        text = "Fast Offline Scanner • Searchable PDF • Multi-Script",
-                        fontSize = 13.sp,
-                        color = Color.Gray
-                    )
 
-                    Spacer(modifier = Modifier.height(12.dp))
+                    // Apple-Inspired Header with "0" (Shunno) Squircle Emblem
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(44.dp)
+                                .clip(RoundedCornerShape(12.dp))
+                                .background(
+                                    Brush.linearGradient(
+                                        colors = listOf(appleBlue, appleDeepBlue)
+                                    )
+                                ),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            // Outer "0" Shunno Ring
+                            Box(
+                                modifier = Modifier
+                                    .size(width = 20.dp, height = 28.dp)
+                                    .border(width = 2.8.dp, color = Color.White, shape = RoundedCornerShape(10.dp))
+                            )
+                            // Green Laser Scan Line through "0"
+                            Box(
+                                modifier = Modifier
+                                    .width(32.dp)
+                                    .height(2.2.dp)
+                                    .background(appleGreen, RoundedCornerShape(2.dp))
+                            )
+                        }
 
-                    // Hybrid Cupertino Language Bar:
-                    // - English & Bangla+English are built-in by default
-                    // - Downloaded languages appear here; long-press any downloaded language to remove it
-                    // - "+ Languages" button opens the on-demand Downloader / Manager sheet
+                        Column {
+                            Text(
+                                text = "Shunno Scan",
+                                fontSize = 30.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.Black
+                            )
+                            Text(
+                                text = "Zero-Cloud Offline Scanner • Searchable PDF • OCR",
+                                fontSize = 12.sp,
+                                color = Color.Gray
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(14.dp))
+
+                    // Hybrid Cupertino Language Bar
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -315,7 +351,7 @@ class MainActivity : ComponentActivity() {
 
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    // Clean Feature Chips (Removed the PDF App Link chip from UI as requested)
+                    // Clean Feature Chips
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -528,7 +564,7 @@ class MainActivity : ComponentActivity() {
                     }
                 }
 
-                // Hybrid Cupertino Language Manager Dialog (Download / Remove optional scripts)
+                // Hybrid Cupertino Language Manager Dialog
                 if (showLanguageManager) {
                     AlertDialog(
                         onDismissRequest = { if (downloadingScript == null) showLanguageManager = false },
@@ -754,7 +790,7 @@ class MainActivity : ComponentActivity() {
     ) {
         val docId = System.currentTimeMillis()
         val timestamp = SimpleDateFormat("MMM dd, yyyy • hh:mm a", Locale.getDefault()).format(Date())
-        val tempName = "NuvioScan_${docId % 10000}.pdf"
+        val tempName = "ShunnoScan_${docId % 10000}.pdf"
 
         val placeholderDoc = ScannedDoc(
             id = docId,
@@ -954,10 +990,6 @@ class MainActivity : ComponentActivity() {
         results
     }
 
-    /**
-     * Preserves Unicode combining marks (\p{M}) so Bangla vowel signs (া, ি, ী, ু, ূ, ৃ, ে, ৈ, ো, ৌ, ং, ্)
-     * remain intact in filenames instead of being replaced with underscores.
-     */
     private fun generateSmartFileName(pages: List<PageOcrData>, docId: Long): String {
         val firstLine = pages.firstOrNull()?.fullPageText
             ?.lineSequence()
@@ -972,7 +1004,7 @@ class MainActivity : ComponentActivity() {
         return if (!sanitized.isNullOrBlank()) {
             "${sanitized}_${docId % 10000}"
         } else {
-            "NuvioScan_${docId % 100000}"
+            "ShunnoScan_${docId % 100000}"
         }
     }
 
@@ -1037,7 +1069,7 @@ class MainActivity : ComponentActivity() {
 
     private fun copyToClipboard(text: String) {
         val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        clipboard.setPrimaryClip(ClipData.newPlainText("NuvioScan OCR", text))
+        clipboard.setPrimaryClip(ClipData.newPlainText("ShunnoScan OCR", text))
         Toast.makeText(this, "OCR text copied to clipboard", Toast.LENGTH_SHORT).show()
     }
 
@@ -1046,7 +1078,7 @@ class MainActivity : ComponentActivity() {
             val values = ContentValues().apply {
                 put(MediaStore.Downloads.DISPLAY_NAME, fileName)
                 put(MediaStore.Downloads.MIME_TYPE, "application/pdf")
-                put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + "/NuvioScan")
+                put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + "/ShunnoScan")
             }
             contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values)?.let { dest ->
                 contentResolver.openInputStream(sourceUri)?.use { input ->
@@ -1054,7 +1086,7 @@ class MainActivity : ComponentActivity() {
                         input.copyTo(output)
                     }
                 }
-                Toast.makeText(this, "Saved $fileName to Downloads/NuvioScan", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Saved $fileName to Downloads/ShunnoScan", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -1064,7 +1096,7 @@ class MainActivity : ComponentActivity() {
             val values = ContentValues().apply {
                 put(MediaStore.Downloads.DISPLAY_NAME, fileName)
                 put(MediaStore.Downloads.MIME_TYPE, mimeType)
-                put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + "/NuvioScan")
+                put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + "/ShunnoScan")
             }
             contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values)?.let { dest ->
                 contentResolver.openOutputStream(dest)?.use { output ->
